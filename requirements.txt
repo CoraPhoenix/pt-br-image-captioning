@@ -1,0 +1,7 @@
+streamlit
+fastapi
+uvicorn
+transformers
+requests
+Pillow
+requests
