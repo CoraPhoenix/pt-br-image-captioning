@@ -16,23 +16,41 @@ def get_base64_of_bin_file(bin_file): # loads file and converts to a base64 stri
         data = f.read()
     return base64.b64encode(data).decode()
 
-def set_png_as_page_bg(png_file): # displays the image as a background image
+def set_png_as_page_bg(png_file, brightness = 0.8): # displays the image as a background image
     bin_str = get_base64_of_bin_file(png_file)
-    page_bg_img = '''
+    page_bg_img = f"""
     <style>
-    body {
-    background-image: url("data:image/jpeg;base64,%s");
-    background-size: cover;
-    }
+    [data-testid="stAppViewContainer"] {{
+        background-image: url("data:image/png;base64,{bin_str}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        filter: brightness({brightness});
+    }}
+    
+    [data-testid="stHeader"] {{
+        background-color: rgba(0,0,0,0);
+    }}
+    
+    [data-testid="stToolbar"] {{
+        right: 2rem;
+    }}
+
+    /* Make other elements visible on darker background */
+    .stApp h1, .stApp p, .stApp div {{
+        color: white !important;
+        text-shadow: 1px 1px 3px black;
+    }}
     </style>
-    ''' % bin_str
+    """
     
     st.markdown(page_bg_img, unsafe_allow_html=True)
     return
 
 # ----------------------------- main code ----------------------------- #
 
-set_png_as_page_bg("img/photo-pile.jpeg")
+set_png_as_page_bg(".\img\photo-pile.jpeg")
 
 st.title("Diga-me o que você vê")
 
